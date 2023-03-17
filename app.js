@@ -1,13 +1,24 @@
-//requerimos express que es una libreria
 const express = require('express');
-//iniciamos la app de expres en la variable app
+const morgan = require('morgan');
 const app = express();
 
+app.use(morgan('dev'));
 app.use(express.json());
 
+const productRouter = express.Router();
+
+app.use('/api/v1/products', productRouter);
+
+app.use((req, res, next) => {
+  req.requestTime = new Date();
+  next();
+});
+
 const findAllProducts = (req, res) => {
+  const { requestTime } = req;
   res.json({
     message: 'hello from the get route',
+    requestTime,
   });
 };
 
@@ -39,13 +50,13 @@ const updateProduct = (req, res) => {
   });
 };
 
-app
-  .route('/api/v1/products')
+productRouter
+  .route('/')
   .get(findAllProducts)
   .post(createProduct);
 
-app
-  .route('/api/v1/products/:id')
+productRouter
+  .route('/:id')
   .get(findOneProduct)
   .patch(updateProduct)
   .delete(deleteProduct);
@@ -56,3 +67,7 @@ const port = 3000;
 app.listen(port, () => {
   console.log(`app running on port ${port}`);
 });
+
+//crear un middleware para adjuntar al obj req una propiedad llamada requestTime y newdate()
+// findAllProducts hay que desestructurar de la req la propiedad requestTime
+//enviar por res

@@ -1,0 +1,2 @@
+En Express el codigo siempre se ejecuta en orden
+La aplicacion siempre empieza por la request
