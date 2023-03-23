@@ -1,6 +1,6 @@
 exports.findAllProducts = (req, res) => {
   const { requestTime } = req;
-  res.json({
+  res.status(200).json({
     message: 'hello from the get route',
     requestTime,
   });
