@@ -1,6 +1,7 @@
+require('dotenv').config();
 const app = require('./app');
 const { db } = require('./database/config');
-const port = 3000;
+const port = process.env.PORT;
 //autenticacion base de datos
 db.authenticate()
   .then(() =>
@@ -11,6 +12,7 @@ db.authenticate()
 db.sync()
   .then(() => console.log('Database synced'))
   .catch((err) => console.log(err));
+
 app.listen(port, () => {
   console.log(`app running on port ${port}`);
 });
