@@ -71,10 +71,44 @@ exports.deleteProduct = (req, res) => {
   });
 };
 
-exports.updateProduct = (req, res) => {
-  console.log(req.params);
-  console.log('me ejecute');
-  res.json({
-    message: 'hell from the patch route',
+exports.updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const {
+    name,
+    image,
+    ingredients,
+    quantity,
+    price,
+    isNew,
+    description,
+  } = req.body;
+
+  const product = await Product.findOne({
+    where: {
+      id,
+      status: true,
+    },
+  });
+  if (!product) {
+    return res.status(404).json({
+      status: 'error',
+      message: `product not with id: ${id} not found`,
+    });
+  }
+
+  await product.update({
+    name,
+    image,
+    ingredients,
+    quantity,
+    price,
+    isNew,
+    description,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'The product has been update',
+    product,
   });
 };
