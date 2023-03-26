@@ -1,21 +1,67 @@
-exports.findAllProducts = (req, res) => {
-  const { requestTime } = req;
+const Product = require('../models/products.model');
+
+exports.findAllProducts = async (req, res) => {
+  const products = await Product.findAll({
+    where: {
+      status: true,
+    },
+  });
+
   res.status(200).json({
+    status: 'success',
     message: 'hello from the get route',
-    requestTime,
+    results: products.length,
+    products,
   });
 };
 
-exports.findOneProduct = (req, res) => {
+exports.findOneProduct = async (req, res) => {
   console.log(req.params.id);
-  res.json({
+
+  const { id } = req.params;
+
+  const product = await Product.findOne({
+    where: {
+      id,
+      status: true,
+    },
+  });
+  if (!product) {
+    return res.status(404).json({
+      status: 'error',
+      message: `product not with id: ${id} not found`,
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
     message: 'hello from the getoneproduct route',
+    product,
   });
 };
-exports.createProduct = (req, res) => {
-  console.log(req.body);
+exports.createProduct = async (req, res) => {
+  const {
+    name,
+    image,
+    ingredients,
+    quantity,
+    price,
+    isNew,
+    description,
+  } = req.body;
+  const product = await Product.create({
+    name,
+    image,
+    ingredients,
+    quantity,
+    price,
+    isNew,
+    description,
+  });
   res.json({
+    status: 'success',
     message: 'hell from the post route',
+    product,
   });
 };
 exports.deleteProduct = (req, res) => {

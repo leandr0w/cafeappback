@@ -9,9 +9,4 @@ app.use(express.json());
 //routes
 app.use('/api/v1/products', productsRoutes);
 
-app.use((req, res, next) => {
-  req.requestTime = new Date();
-  next();
-});
-
 module.exports = app;

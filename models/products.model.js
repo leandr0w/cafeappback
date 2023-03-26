@@ -12,6 +12,14 @@ const Product = db.define('products', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  ingredients: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   quantity: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -30,7 +38,7 @@ const Product = db.define('products', {
   },
   status: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    defaultValue: true,
   },
 });
 module.exports = Product;
