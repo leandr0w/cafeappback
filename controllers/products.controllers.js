@@ -64,10 +64,28 @@ exports.createProduct = async (req, res) => {
     product,
   });
 };
-exports.deleteProduct = (req, res) => {
-  console.log('me ejecute');
-  res.json({
-    message: 'hell from the delete route',
+exports.deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const product = await Product.findOne({
+    where: {
+      id,
+      status: true,
+    },
+  });
+  if (!product) {
+    return res.status(404).json({
+      status: 'error',
+      message: `product not with id: ${id} not found`,
+    });
+  }
+  await product.update({
+    status: false,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'The product has been removed',
+    product,
   });
 };
 
