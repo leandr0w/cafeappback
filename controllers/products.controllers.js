@@ -16,23 +16,7 @@ exports.findAllProducts = async (req, res) => {
 };
 
 exports.findOneProduct = async (req, res) => {
-  console.log(req.params.id);
-
-  const { id } = req.params;
-
-  const product = await Product.findOne({
-    where: {
-      id,
-      status: true,
-    },
-  });
-  if (!product) {
-    return res.status(404).json({
-      status: 'error',
-      message: `product not with id: ${id} not found`,
-    });
-  }
-
+  const { product } = req;
   res.status(200).json({
     status: 'success',
     message: 'hello from the getoneproduct route',
@@ -40,15 +24,8 @@ exports.findOneProduct = async (req, res) => {
   });
 };
 exports.createProduct = async (req, res) => {
-  const {
-    name,
-    image,
-    ingredients,
-    quantity,
-    price,
-    isNew,
-    description,
-  } = req.body;
+  const { name, image, ingredients, quantity, price, isNew, description } =
+    req.body;
   const product = await Product.create({
     name,
     image,
@@ -60,24 +37,13 @@ exports.createProduct = async (req, res) => {
   });
   res.json({
     status: 'success',
-    message: 'hell from the post route',
+    message: 'The product has been created',
     product,
   });
 };
 exports.deleteProduct = async (req, res) => {
-  const { id } = req.params;
-  const product = await Product.findOne({
-    where: {
-      id,
-      status: true,
-    },
-  });
-  if (!product) {
-    return res.status(404).json({
-      status: 'error',
-      message: `product not with id: ${id} not found`,
-    });
-  }
+  const { product } = req;
+
   await product.update({
     status: false,
   });
@@ -90,29 +56,9 @@ exports.deleteProduct = async (req, res) => {
 };
 
 exports.updateProduct = async (req, res) => {
-  const { id } = req.params;
-  const {
-    name,
-    image,
-    ingredients,
-    quantity,
-    price,
-    isNew,
-    description,
-  } = req.body;
-
-  const product = await Product.findOne({
-    where: {
-      id,
-      status: true,
-    },
-  });
-  if (!product) {
-    return res.status(404).json({
-      status: 'error',
-      message: `product not with id: ${id} not found`,
-    });
-  }
+  const { product } = req;
+  const { name, image, ingredients, quantity, price, isNew, description } =
+    req.body;
 
   await product.update({
     name,
